@@ -9,7 +9,6 @@ class PrismicPageComponent extends Component {
         notFound: false,
     };
 
-
     async getDoc (apiEndpoint){
         //console.log("bouton pressed: " + apiEndpoint);
         const res = await fetch(apiEndpoint + "/documents/search?ref=XJS75RAAABMNYq-b");
@@ -65,18 +64,17 @@ class PrismicPageComponent extends Component {
         //this.test(apiEndpoint);
         return (
             <div>
-                <div> ID :  {doc.id}</div>
-                <div> Title :  {!!doc && " dataDoc :" + JSON.stringify(doc.data.title[0].text)}</div>
-
+                <div> ID :  {!!doc && doc.id}</div>
+                <div>Title : {!!doc && doc.data.title[0].text}</div>
+                <div>Description : {!!doc && doc.data.description[0].text}</div>
+                <img src={doc ? doc.data.image.url : undefined} alt="img"></img>
                 <button onClick={() => this.getDoc(apiEndpoint)}>retrieve the doc</button>
             </div>
         );
     }
-
-
-
 }
 /*
+   <img src={!!doc && doc.data.image.url.toString()}></img>
 
                 <div> ID :  {doc.id}</div>
                 <div> ID :  {doc.id}</div>
