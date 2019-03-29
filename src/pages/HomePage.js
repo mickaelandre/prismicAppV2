@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 
 class HomePageComponent extends Component{
     render(){
-        return <h1>Welcome page</h1>
+        return <h1>Welcome page 3</h1>
     }
 }
 
