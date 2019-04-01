@@ -1,3 +1,3 @@
 export const prismicConfig = {
-    apiEndpoint: "https://getting-started-react-prismic.prismic.io/api/v2"
+    apiEndpoint: 'https://myfirstprismyc.prismic.io/api/v2'
 };
