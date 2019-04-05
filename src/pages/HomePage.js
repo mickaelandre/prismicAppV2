@@ -13,6 +13,7 @@ class HomePageComponent extends Component {
                 >
                     Try Me
                 </button>{' '}
+                <h3>TEST</h3>
             </div>
         );
     }

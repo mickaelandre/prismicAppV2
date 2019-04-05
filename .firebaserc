@@ -1,5 +1,6 @@
 {
   "projects": {
-    "test-prismic-firebase": "test-prismic-firebase"
+    "test-prismic-firebase": "test-prismic-firebase",
+    "default": "test-prismic-firebase"
   }
 }
