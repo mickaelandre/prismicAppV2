@@ -1,28 +1,29 @@
 import React, { Component } from 'react';
 import { prismicConfig } from '../config/prismic.config';
-import {NoPublicationPage} from "./NoPublicationPage";
+import { NoPublicationPage } from './NoPublicationPage';
+const Prismic = require('prismic-javascript');
 
 class PrismicPageComponent extends Component {
     state = {
-        doc: {},
+        doc: null,
         notFound: false,
         masterRef: ''
     };
 
     async componentDidMount() {
-        //Recupération masterRef
-        const res_temp = await fetch(prismicConfig.apiEndpoint);
-        const json_MasterRef = await res_temp.json();
-        const MasterRef = Object.values(json_MasterRef.refs[0].ref).join('');
+        const api = await Prismic.api(prismicConfig.apiEndpoint);
+        const response = await api.query('');
+        const doc_temp = response.results
+            .sort((a, b) => a.last_publication_date < b.last_publication_date)
+            .map(val => val.data);
+        this.setState({
+            doc: doc_temp
+        });
 
-        //Récupération de toutes les pages publiées sur la nouvelle masterRef
-        const result = await fetch(prismicConfig.apiEndpoint + `/documents/search?ref=${MasterRef}`);
-        const data = await result.json();
-        if (data !== null && data !== undefined) {
-            console.log(data.results[0]);
-        }
         //Detection si on a pas de publication
-        if (data.results[0] === undefined) {
+        if (typeof doc_temp !== 'undefined' && doc_temp.length > 0) {
+            this.setState({ notFound: false });
+        } else {
             this.setState({ notFound: true });
         }
     }
@@ -38,9 +39,9 @@ class PrismicPageComponent extends Component {
     };
 
     render() {
-        const { notFound } = this.state;
+        const { notFound, doc } = this.state;
         const { history } = this.props;
-        console.log(notFound);
+        console.log(doc);
         return (
             <div>
                 {notFound === false ? (
@@ -58,5 +59,4 @@ class PrismicPageComponent extends Component {
         );
     }
 }
-
 export const PrismicPage = PrismicPageComponent;
