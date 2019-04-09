@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { prismicConfig } from '../config/prismic.config';
-import PrismicReact from 'prismic-reactjs';
-import Prismic from 'prismic-javascript';
+import {NoPublicationPage} from "./NoPublicationPage";
 
 class PrismicPageComponent extends Component {
     state = {
@@ -53,7 +52,7 @@ class PrismicPageComponent extends Component {
                         <div style={{ display: 'flex' }}> Data Title : {this.displayTitle()}</div>
                     </div>
                 ) : (
-                    <h1>NOTHING PUBLISHED</h1>
+                    <NoPublicationPage />
                 )}
             </div>
         );
