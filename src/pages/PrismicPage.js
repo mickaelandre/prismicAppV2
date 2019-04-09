@@ -11,40 +11,50 @@ class PrismicPageComponent extends Component {
     };
 
     async componentDidMount() {
-        /*On recupere bien la masterRef
-        const result = await fetch(prismicConfig.apiEndpoint);
-        const json_MasterRef = await result.json();
+        //Recupération masterRef
+        const res_temp = await fetch(prismicConfig.apiEndpoint);
+        const json_MasterRef = await res_temp.json();
         const MasterRef = Object.values(json_MasterRef.refs[0].ref).join('');
-        */
-        //Autre méthode pour récuperer les données de prismic
 
-        Prismic.api(prismicConfig.apiEndpoint).then(api => {
-            api.query('').then(response => {
-                if (response) {
-                    this.setState({ doc: response.results[0] });
-                }
-            });
-        });
+        //Récupération de toutes les pages publiées sur la nouvelle masterRef
+        const result = await fetch(prismicConfig.apiEndpoint + `/documents/search?ref=${MasterRef}`);
+        const data = await result.json();
+        if (data !== null && data !== undefined) {
+            console.log(data.results[0]);
+        }
+        //Detection si on a pas de publication
+        if (data.results[0] === undefined) {
+            this.setState({ notFound: true });
+        }
     }
 
     displayTitle = () => {
         const { doc } = this.state;
-        console.log(doc);
-        const Titles_list = Object.values(doc)[7];
-        if (Titles_list !== null && Titles_list !== undefined) {
-            return <div style={{ display: 'flex', color: 'red' }}>{Titles_list[0]}</div>;
+        if (!!doc) {
+            const Titles_list = Object.values(doc)[7];
+            if (Titles_list !== null && Titles_list !== undefined) {
+                return <div style={{ display: 'flex', color: 'red' }}>{Titles_list[0]}</div>;
+            }
         }
     };
 
     render() {
+        const { notFound } = this.state;
         const { history } = this.props;
+        console.log(notFound);
         return (
             <div>
-                <h2>PRISMIC TEST</h2>
-                <button style={{ display: 'flex' }} onClick={() => history.push('/')}>
-                    Back to Home
-                </button>
-                <div style={{ display: 'flex' }}> Data Title : {this.displayTitle()}</div>
+                {notFound === false ? (
+                    <div>
+                        <h2>PRISMIC TEST</h2>
+                        <button style={{ display: 'flex' }} onClick={() => history.push('/')}>
+                            Back to Home
+                        </button>
+                        <div style={{ display: 'flex' }}> Data Title : {this.displayTitle()}</div>
+                    </div>
+                ) : (
+                    <h1>NOTHING PUBLISHED</h1>
+                )}
             </div>
         );
     }
